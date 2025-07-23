@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TechBindu Admin Panel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #0a8a0a;
@@ -17,39 +19,63 @@
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background: #e6f0ea;
+      font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 20px;
+      background: #f1f5f9;
+    }
+
+    /* --- Background Video Style --- */
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.2; /* Updated Opacity to 20% */
     }
 
     .container {
       max-width: 1200px;
       margin: auto;
-      background: #ffffffcc;
+      background: rgba(255, 255, 255, 0.95); /* Slightly transparent background */
       padding: 30px;
       border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     }
 
     h1, h2 {
       text-align: center;
-      color: var(--primary);
+      color: #333;
+      font-weight: 600;
+    }
+    h2 {
+        font-size: 1.2rem;
+        color: #555;
     }
 
     #login-section {
       text-align: center;
       padding: 60px 20px;
     }
+    
+    /* --- Logo Style --- */
+    #login-section img {
+        width: 120px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+    }
 
     #login-section input {
       padding: 14px;
-      width: 250px;
+      width: 280px;
       border-radius: 8px;
       border: 1px solid #ccc;
       margin-bottom: 20px;
       font-size: 16px;
-      transition: width 0.3s ease;
+      font-family: 'Poppins', sans-serif;
     }
 
     #login-section button {
@@ -59,9 +85,10 @@
       padding: 12px 30px;
       border-radius: 8px;
       cursor: pointer;
-      transition: 0.3s;
       font-size: 16px;
-      width: 250px;
+      font-weight: 500;
+      width: 280px;
+      transition: background-color 0.3s;
     }
 
     #login-section button:hover {
@@ -71,24 +98,28 @@
     #login-error {
       color: red;
       margin-top: 10px;
-      font-weight: 600;
+      font-weight: 500;
     }
 
     #admin-panel {
       display: none;
-      position: relative;
+    }
+
+    .header-container {
+        position: relative;
+        padding-bottom: 10px;
     }
 
     #logout-btn {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 0;
+      right: 0;
       background-color: var(--secondary);
       color: white;
       border: none;
       padding: 10px 20px;
       border-radius: 8px;
-      font-weight: bold;
+      font-weight: 500;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
@@ -98,7 +129,8 @@
     }
 
     .table-container {
-      margin-top: 30px;
+      margin-top: 20px;
+      overflow-x: auto;
     }
 
     table {
@@ -107,16 +139,17 @@
     }
 
     th, td {
-      border: 1px solid #ddd;
-      padding: 12px;
+      border: 1px solid #e2e8f0;
+      padding: 14px;
       text-align: left;
       font-size: 14px;
-      vertical-align: top;
+      vertical-align: middle;
     }
 
     th {
-      background-color: #dff2e0;
-      color: var(--primary);
+      background-color: #f8fafc;
+      color: var(--primary); /* Changed to green for PC view */
+      font-weight: 600;
     }
 
     .details {
@@ -128,30 +161,38 @@
       overflow-y: auto;
       font-size: 13px;
       word-break: break-word;
+      border: 1px solid #e2e8f0;
     }
 
     .status-select {
-      padding: 6px;
+      padding: 8px 12px;
       border-radius: 6px;
       border: 1px solid #ccc;
       font-size: 13px;
+      font-weight: 500;
+      font-family: 'Poppins', sans-serif;
+      transition: background-color 0.3s, border-color 0.3s;
     }
+    
+    .status-select.status-pending { background-color: #fff3cd; color: #856404; border-color: #ffeeba; }
+    .status-select.status-shipped { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb; }
+    .status-select.status-delivered { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+    .status-select.status-cancelled { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
 
     .update-btn {
       padding: 8px 14px;
-      margin-top: 8px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
       font-size: 13px;
+      font-weight: 500;
       transition: background-color 0.3s ease;
-      background-color: #444;
+      background-color: #334155;
       color: white;
-      width: 100%;
     }
 
     .update-btn:hover {
-      background-color: #222;
+      background-color: #1e293b;
     }
 
     #loading-message, #no-orders-message {
@@ -161,62 +202,34 @@
       color: #777;
     }
 
-    /* --- Mobile View Enhancements --- */
     @media (max-width: 768px) {
-      body {
-        padding: 10px;
+      body { padding: 10px; }
+      .container { padding: 15px; }
+      
+      .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        position: static;
       }
-      .container {
-        padding: 15px;
-      }
-      #login-section input, 
-      #login-section button {
-        width: 90%;
+      h1 {
+        text-align: left;
+        margin: 0;
+        font-size: 1.4rem;
       }
       #logout-btn {
-        top: 10px;
-        right: 10px;
+        position: static;
         padding: 8px 16px;
-        font-size: 14px;
       }
       
-      /* Force table to not be a table anymore */
-      table, thead, tbody, th, td, tr {
-        display: block;
-      }
-
-      /* Hide table headers (but not for screen readers) */
-      thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-      }
-
-      tr {
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        margin-bottom: 15px;
-        padding: 10px;
-      }
-
-      td {
-        /* Behave like a "row" */
-        border: none;
-        border-bottom: 1px solid #eee;
-        position: relative;
-        padding-left: 45%;
-        padding-top: 8px;
-        padding-bottom: 8px;
-        min-height: 30px;
-        text-align: right;
-      }
-
-      td:last-child {
-        border-bottom: 0;
-      }
+      table, thead, tbody, th, td, tr { display: block; }
+      thead tr { position: absolute; top: -9999px; left: -9999px; }
+      tr { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 15px; padding: 10px; background-color: #fff; }
+      td { border: none; border-bottom: 1px solid #f1f5f9; position: relative; padding-left: 45%; padding-top: 8px; padding-bottom: 8px; min-height: 40px; text-align: right; }
+      td:last-child { border-bottom: 0; }
       
       td:before {
-        /* Now like a table header */
         position: absolute;
         top: 50%;
         left: 10px;
@@ -224,20 +237,27 @@
         padding-right: 10px;
         white-space: nowrap;
         content: attr(data-label);
-        font-weight: bold;
+        font-weight: 600;
         text-align: left;
         transform: translateY(-50%);
+        color: var(--primary); /* Green color for mobile labels */
       }
-      
-      .details {
-        text-align: left;
-      }
+
+      .details, .update-btn { text-align: center; }
+      .update-btn { width: 100%; margin-top: 5px; }
     }
   </style>
 </head>
 <body>
+
+  <video autoplay muted loop id="bg-video">
+    <source src="techbindu intro.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+
   <div class="container">
     <div id="login-section">
+      <img src="logo.jpeg" alt="TechBindu Logo">
       <h1>Admin Login</h1>
       <input type="password" id="password" placeholder="Enter Password" />
       <br />
@@ -246,8 +266,10 @@
     </div>
 
     <div id="admin-panel">
-      <button id="logout-btn" onclick="logout()">Logout</button>
-      <h1>Order Management</h1>
+      <div class="header-container">
+        <h1>Order Management</h1>
+        <button id="logout-btn" onclick="logout()">Logout</button>
+      </div>
       <h2 id="total-orders"></h2>
 
       <div class="table-container">
@@ -325,7 +347,7 @@
 
     function renderOrders(orders) {
       totalOrders.textContent = `Total Orders: ${orders.length}`;
-      ordersTableBody.innerHTML = ""; // Clear previous orders
+      ordersTableBody.innerHTML = ""; 
       orders.forEach(order => {
         const row = document.createElement("tr");
         const orderDate = new Date(order.Timestamp).toLocaleString("en-GB", {
@@ -345,7 +367,7 @@
           <td data-label="Details"><div class="details">${order.OrderDetails || ''}</div></td>
           <td data-label="Order ID">${order.OrderID || ''}</td>
           <td data-label="Status">
-            <select class="status-select" id="status-${order.rowNum}">
+            <select class="status-select" id="status-${order.rowNum}" onchange="updateStatusColor(this)">
               <option value="Pending" ${order.Status === "Pending" ? "selected" : ""}>Pending</option>
               <option value="Shipped" ${order.Status === "Shipped" ? "selected" : ""}>Shipped</option>
               <option value="Delivered" ${order.Status === "Delivered" ? "selected" : ""}>Delivered</option>
@@ -357,7 +379,16 @@
           </td>
         `;
         ordersTableBody.appendChild(row);
+
+        const newSelect = document.getElementById(`status-${order.rowNum}`);
+        updateStatusColor(newSelect);
       });
+    }
+
+    function updateStatusColor(selectElement) {
+        selectElement.classList.remove('status-pending', 'status-shipped', 'status-delivered', 'status-cancelled');
+        const statusClass = 'status-' + selectElement.value.toLowerCase();
+        selectElement.classList.add(statusClass);
     }
 
     async function updateStatus(button, rowNum) {
