@@ -1,8 +1,6 @@
-// ------ Configuration ------
-const API_BASE_URL = "YOUR_DEPLOYED_SCRIPT_URL"; // যেমন: https://script.google.com/macros/s/AKfycbx4_xxx/exec
+const API_BASE_URL = "https://script.google.com/macros/s/AKfycbyxJr37tvP4_MT77B1YUyBtULjT8wN1T-SEjs9lJjB_Oxxo5BPuEcq-sYzGllmfBd27/exec";
 const AUTH_URL = API_BASE_URL + "?auth=1";
 
-// ------ DOM Elements ------
 const loginSection = document.getElementById("login-section");
 const adminPanel = document.getElementById("admin-panel");
 const passwordInput = document.getElementById("password");
@@ -19,15 +17,12 @@ const searchInput = document.getElementById("search-input");
 const statusFilter = document.getElementById("status-filter");
 const dateFilter = document.getElementById("date-filter");
 const paginationDiv = document.getElementById("pagination");
-
-// Modal
 const modalOverlay = document.getElementById("modal-overlay");
 const confirmationModal = document.getElementById("confirmation-modal");
 const confirmBtn = document.getElementById("confirm-btn");
 const cancelBtn = document.getElementById("cancel-btn");
 const modalText = document.getElementById("modal-text");
 
-// ------ State ------
 let currentUserToken = null;
 let orders = [];
 let filteredOrders = [];
@@ -37,14 +32,12 @@ let pendingUpdate = null;
 
 document.body.setAttribute("lang", "bn");
 
-// ------ Login System ------
 loginBtn.onclick = async function() {
   loginError.textContent = "";
   loginBtn.disabled = true;
   showSpinner(true);
   const password = passwordInput.value;
   try {
-    // Authentication API call (Apps Script)
     const res = await fetch(AUTH_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -91,13 +84,11 @@ window.addEventListener("DOMContentLoaded", function() {
   if (sessionStorage.getItem("darkMode") === "true") document.body.classList.add("dark");
 });
 
-// ------ Fetch Orders ------
 async function fetchOrders() {
   showSpinner(true);
   noOrdersMessage.style.display = "none";
   ordersTableBody.innerHTML = "";
   try {
-    // Token must be sent as URL param for Apps Script CORS
     const res = await fetch(API_BASE_URL + "?token=" + currentUserToken);
     const result = await res.json();
     if (result.success && Array.isArray(result.data) && result.data.length > 0) {
@@ -248,7 +239,6 @@ modalOverlay.onclick = function(e) {
 async function updateOrderStatus(rowNum, newStatus) {
   showSpinner(true);
   try {
-    // Token as param for CORS
     const res = await fetch(API_BASE_URL + "?token=" + currentUserToken, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
