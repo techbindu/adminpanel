@@ -1,334 +1,370 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TechBindu Admin Panel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechBindu Order Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root {
       --primary: #0a8a0a;
       --secondary: #e65c00;
-      --light: #f3f3f3;
+      --body-bg: #f1f5f9;
+      --card-bg: #fff;
+      --header-bg: #fff;
+      --text-color: #222;
     }
-
-    * {
+    .dark-mode {
+      --primary: #4CAF50;
+      --secondary: #FF5722;
+      --body-bg: #121212;
+      --card-bg: #232323;
+      --header-bg: #181818;
+      --text-color: #e0e0e0;
+    }
+    body {
+      font-family: 'Poppins', 'Hind Siliguri', sans-serif;
+      background: var(--body-bg);
+      color: var(--text-color);
+      margin: 0;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+    .container {
+      max-width: 900px;
+      margin: 32px auto;
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      padding: 30px 18px 18px 18px;
+    }
+    header {
+      background: var(--header-bg);
+      border-radius: 18px 18px 0 0;
+      padding: 18px 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+    .header-title {
+      font-family: 'Hind Siliguri', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: center;
+      width: 100%;
+    }
+    .search-box {
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 10px 32px 10px 10px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+      font-family: 'Hind Siliguri', sans-serif;
+      transition: background 0.3s, color 0.3s;
+      background: var(--card-bg);
+      color: var(--text-color);
       box-sizing: border-box;
     }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f1f5f9;
-      margin: 0;
-      padding: 20px;
+    .search-box .fa-search {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+      pointer-events: none;
+      font-size: 22px;
     }
-
-    /* --- Background Video Style --- */
-    #bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
+    .header-icons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      margin: 10px 0 0 0;
+    }
+    .header-icons a {
+      color: var(--primary);
+      font-size: 24px;
+      padding: 3px 6px;
+      border-radius: 7px;
+      transition: background 0.2s, color 0.3s;
+      background: transparent;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+    .header-icons a:hover {
+      background: #e0f0e0;
+      color: var(--secondary);
+    }
+    .header-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      margin: 10px 0 0 0;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-      opacity: 0.2;
     }
-
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    #themeToggleBtn {
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: var(--text-color);
+      cursor: pointer;
+      border-radius: 50%;
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      transition: color 0.3s, background 0.3s;
     }
-
-    h1, h2 {
-      text-align: center;
-      color: #333;
-      font-weight: 600;
-    }
-    h2 {
-      font-size: 1.2rem;
-      color: #555;
-    }
-
-    #login-section {
-      text-align: center;
-      padding: 60px 20px;
-    }
-    
-    /* --- Logo Style --- */
-    #login-section img {
-      width: 120px;
-      margin-bottom: 20px;
+    #themeToggleBtn:hover { color: var(--primary); background: #e0f0e0; }
+    #logout-btn {
+      background: var(--secondary);
+      color: #fff;
+      border: none;
       border-radius: 8px;
+      padding: 10px 30px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-left: 0;
     }
-
+    #logout-btn:hover { background: #b85000; }
+    #login-section {
+      max-width: 400px;
+      margin: 80px auto 0 auto;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      text-align: center;
+      padding: 40px 24px;
+    }
+    #login-section img {
+      width: 90px; border-radius: 7px; margin-bottom: 18px;
+    }
+    #login-section h1 {
+      font-family: 'Hind Siliguri', sans-serif;
+      font-size: 1.7rem;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
     #login-section input {
       padding: 14px;
-      width: 280px;
+      width: 80%;
       border-radius: 8px;
       border: 1px solid #ccc;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       font-size: 16px;
-      transition: width 0.3s ease;
       font-family: 'Poppins', sans-serif;
+      display: block;
+      margin: 0 auto 18px auto;
     }
-
     #login-section button {
-      background-color: var(--primary);
-      color: white;
+      background: var(--primary);
+      color: #fff;
       border: none;
-      padding: 12px 30px;
       border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s;
+      padding: 12px 30px;
       font-size: 16px;
-      width: 280px;
       font-weight: 500;
+      width: 80%;
+      cursor: pointer;
+      transition: background 0.3s;
     }
-
-    #login-section button:hover {
-      background-color: #067006;
-    }
-
+    #login-section button:hover { background: #087108; }
     #login-error {
       color: red;
+      font-weight: 500;
       margin-top: 10px;
-      font-weight: 500;
     }
-
-    #admin-panel {
-      display: none;
+    .orders-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 22px;
+      margin-top: 14px;
     }
-
-    .header-container {
+    .order-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 22px 18px 18px 18px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 10px;
+      flex-direction: column;
+      gap: 8px;
+      transition: box-shadow 0.2s;
+      position: relative;
+      border-left: 5px solid var(--primary);
     }
-
-    .header-container h1 {
-        text-align: left;
+    .order-card:hover { box-shadow: 0 6px 28px rgba(0,0,0,0.11); }
+    .order-header {
+      display: flex; justify-content: space-between; align-items: center;
     }
-
-    #logout-btn {
-      background-color: var(--secondary);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    #logout-btn:hover {
-      background-color: #c54a00;
-    }
-
-    .table-container {
-      margin-top: 20px;
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th, td {
-      border: 1px solid #e2e8f0;
-      padding: 14px;
-      text-align: left;
-      font-size: 14px;
-      vertical-align: middle;
-    }
-
-    th {
-      background-color: #f8fafc;
+    .order-date {
+      font-size: 1rem;
+      font-family: 'Hind Siliguri', sans-serif;
       color: var(--primary);
       font-weight: 600;
     }
-
-    .details {
-      white-space: pre-wrap;
-      background: var(--light);
-      padding: 10px;
+    .order-id {
+      font-size: 13px;
+      color: var(--secondary);
+      font-weight: 600;
+      background: #f8f8f8;
       border-radius: 5px;
-      max-height: 120px;
-      overflow-y: auto;
-      font-size: 13px;
-      word-break: break-word;
-      border: 1px solid #e2e8f0;
+      padding: 2px 8px;
+      margin-left: 6px;
     }
-
-    .status-select {
-      padding: 8px 12px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 13px;
-      font-weight: 500;
-      font-family: 'Poppins', sans-serif;
-      transition: background-color 0.3s, border-color 0.3s;
+    .order-detail-row {
+      font-size: 15px;
+      color: var(--text-color);
+      margin-bottom: 4px;
     }
-    
-    .status-select.status-pending { background-color: #fff3cd; color: #856404; border-color: #ffeeba; }
-    .status-select.status-shipped { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb; }
-    .status-select.status-delivered { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
-    .status-select.status-cancelled { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
-
-    .update-btn {
-      padding: 8px 14px;
-      margin-top: 8px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
-      transition: background-color 0.3s ease;
-      background-color: #334155;
-      color: white;
-      width: 100%;
+    .order-detail-row span {
+      font-weight: 700;
+      color: var(--primary);
+      margin-right: 4px;
+      font-family: 'Hind Siliguri', sans-serif;
     }
-
-    .update-btn:hover {
-      background-color: #1e293b;
+    .order-details {
+      background: #f3f3f3;
+      border-radius: 8px;
+      padding: 8px 11px;
+      font-size: 15px;
+      margin-bottom: 6px;
+      white-space: pre-wrap;
+      word-break: break-all;
     }
-
-    #loading-message, #no-orders-message {
+    .status-row {
+      font-size: 15px;
+      font-family: 'Hind Siliguri', sans-serif;
+      color: var(--primary);
+      margin-top: 6px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .status-row.status-pending { background: #fff3cd; color: #856404; border-radius:6px; padding: 3px 10px; display:inline-block;}
+    .status-row.status-shipped { background: #d1ecf1; color: #0c5460; border-radius:6px; padding: 3px 10px; display:inline-block;}
+    .status-row.status-delivered { background: #d4edda; color: #155724; border-radius:6px; padding: 3px 10px; display:inline-block;}
+    .status-row.status-cancelled { background: #f8d7da; color: #721c24; border-radius:6px; padding: 3px 10px; display:inline-block;}
+    .no-orders { text-align: center; font-size: 17px; margin: 30px 0; color: #777; }
+    .pagination-bar {
+      margin: 35px auto 12px auto;
       text-align: center;
-      font-size: 18px;
-      margin-top: 30px;
-      color: #777;
     }
-
-    /* --- Mobile View Enhancements --- */
+    .pagination-btn {
+      background: #fff;
+      color: var(--primary);
+      border: 1px solid #ddd;
+      padding: 8px 14px;
+      margin: 0 4px;
+      border-radius: 5px;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s, color 0.3s;
+    }
+    .pagination-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+    .pagination-btn:hover { background: #e0f0e0; }
     @media (max-width: 768px) {
-      body { padding: 10px; }
-      .container { padding: 15px; }
-      
-      .header-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
+      .container { padding: 7px; }
+      header {
+        padding: 14px 4px;
+        gap: 12px;
       }
-
-      .header-container h1 {
-        text-align: left;
-        margin: 0;
-        font-size: 1.4rem;
-      }
-      
-      #login-section input, 
-      #login-section button {
-        width: 90%;
-      }
-      
-      #logout-btn {
-        padding: 8px 16px;
-        font-size: 14px;
-      }
-
-      /* Force table to not be a table anymore */
-      table, thead, tbody, th, td, tr { display: block; }
-      thead tr { position: absolute; top: -9999px; left: -9999px; }
-      tr { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 15px; padding: 10px; background-color: #fff; }
-      td { border: none; border-bottom: 1px solid #f1f5f9; position: relative; padding-left: 45%; padding-top: 8px; padding-bottom: 8px; min-height: 40px; text-align: right; }
-      td:last-child { border-bottom: 0; }
-
-      td:before {
-        position: absolute;
-        top: 50%;
-        left: 10px;
-        width: 40%;
-        padding-right: 10px;
-        white-space: nowrap;
-        content: attr(data-label);
-        font-weight: 600;
-        text-align: left;
-        transform: translateY(-50%);
-        color: var(--primary);
-      }
-      
-      .details {
-        text-align: left;
-      }
-      
-      .update-btn { 
-        width: 100%;
-        margin-top: 5px;
-      }
+      .header-title { font-size: 1.2rem; }
+      .search-box { max-width: 100%; }
+      .header-icons a { font-size: 21px; }
+      .header-actions { gap: 10px; }
+      #logout-btn { padding: 10px 12px; font-size: 15px; }
+      .orders-list { grid-template-columns: 1fr; }
+      .order-card { padding: 13px 4px 8px 4px; }
     }
   </style>
 </head>
 <body>
-
-  <video autoplay muted loop id="bg-video">
-    <source src="techbindu intro.mp4" type="video/mp4">
-    Your browser does not support HTML5 video.
-  </video>
-
-  <div class="container">
-    <div id="login-section">
-      <img src="logo.jpeg" alt="TechBindu Logo">
-      <h1>Admin Login</h1>
-      <input type="password" id="password" placeholder="Enter Password" />
-      <br />
-      <button onclick="login()">Login</button>
-      <p id="login-error"></p>
-    </div>
-
-    <div id="admin-panel">
-      <div class="header-container">
-        <h1>Order Management</h1>
-        <button id="logout-btn" onclick="logout()">Logout</button>
-      </div>
-      <h2 id="total-orders"></h2>
-
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Date & Time</th>
-              <th>Name</th>
-              <th>Address</th>
-              <th>Phone</th>
-              <th>Details</th>
-              <th>Order ID</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="orders-table-body"></tbody>
-        </table>
-      </div>
-
-      <p id="loading-message">Loading orders...</p>
-      <p id="no-orders-message" style="display:none;">No orders found.</p>
-    </div>
+  <div id="login-section">
+    <img src="logo.jpeg" alt="TechBindu Logo">
+    <h1>অ্যাডমিন লগইন</h1>
+    <input type="password" id="password" placeholder="পাসওয়ার্ড লিখুন" />
+    <button onclick="login()">লগইন</button>
+    <p id="login-error"></p>
   </div>
-
+  <div class="container" id="admin-panel" style="display: none;">
+    <header>
+      <span class="header-title">অর্ডার ম্যানেজমেন্ট</span>
+      <div class="search-box">
+        <input type="search" id="searchInput" placeholder="নাম / ফোন / Order ID / ঠিকানা...">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="header-icons">
+        <a href="https://www.facebook.com/share/19WAjNVe92/?mibextid=wwXIfr" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/techbindu/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="mailto:techbindugadget@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+        <a href="https://techbindu.github.io/" target="_blank" title="Main Website"><i class="fas fa-globe"></i></a>
+      </div>
+      <div class="header-actions">
+        <button id="themeToggleBtn" title="ডার্ক/লাইট"><i class="fas fa-moon"></i></button>
+        <button id="logout-btn" onclick="logout()">লগআউট</button>
+      </div>
+    </header>
+    <div id="orders-list" class="orders-list"></div>
+    <div id="pagination-bar" class="pagination-bar"></div>
+    <p id="no-orders-message" class="no-orders" style="display:none;">কোনো অর্ডার পাওয়া যায়নি।</p>
+  </div>
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4_WzkHKY3X6CTY3ws9ciRVScQrdGr7DHNOd7jKI4H-S6UR0_O39UjNRE3kssPL7BkcQ/exec";
-    const ADMIN_PASSWORD = "Admin69";
+    // Theme toggle
+    const body = document.body;
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = themeToggleBtn.querySelector('i');
+    function setTheme(theme) {
+      if (theme === 'dark') {
+        body.classList.add('dark-mode');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.remove('dark-mode');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+        localStorage.setItem('theme', 'light');
+      }
+    }
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) { setTheme(savedTheme); }
+    else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { setTheme('dark'); }
+    else { setTheme('light'); }
+    themeToggleBtn.addEventListener('click', () => {
+      setTheme(body.classList.contains('dark-mode') ? 'light' : 'dark');
+    });
 
+    // Admin login
+    const ADMIN_PASSWORD = "Admin69";
     const loginSection = document.getElementById("login-section");
     const adminPanel = document.getElementById("admin-panel");
     const passwordInput = document.getElementById("password");
     const loginError = document.getElementById("login-error");
-    const ordersTableBody = document.getElementById("orders-table-body");
-    const loadingMessage = document.getElementById("loading-message");
-    const noOrdersMessage = document.getElementById("no-orders-message");
-    const totalOrders = document.getElementById("total-orders");
-
+    passwordInput.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") login();
+    });
     function login() {
       loginError.textContent = "";
       if (passwordInput.value === ADMIN_PASSWORD) {
@@ -337,104 +373,13 @@
         adminPanel.style.display = "block";
         fetchOrders();
       } else {
-        loginError.textContent = "Incorrect password!";
+        loginError.textContent = "পাসওয়ার্ড ভুল!";
       }
     }
-
     function logout() {
       sessionStorage.removeItem("loggedIn");
       location.reload();
     }
-
-    async function fetchOrders() {
-      loadingMessage.style.display = "block";
-      noOrdersMessage.style.display = "none";
-      ordersTableBody.innerHTML = "";
-      try {
-        const res = await fetch(SCRIPT_URL);
-        const result = await res.json();
-        if (result.success && result.data.length > 0) {
-          renderOrders(result.data);
-        } else {
-          noOrdersMessage.style.display = "block";
-        }
-      } catch {
-        noOrdersMessage.textContent = "Failed to load orders.";
-        noOrdersMessage.style.display = "block";
-      } finally {
-        loadingMessage.style.display = "none";
-      }
-    }
-
-    function renderOrders(orders) {
-      totalOrders.textContent = `Total Orders: ${orders.length}`;
-      ordersTableBody.innerHTML = "";
-      orders.forEach(order => {
-        const row = document.createElement("tr");
-        const orderDate = new Date(order.Timestamp).toLocaleString("en-GB", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: true
-        });
-
-        row.innerHTML = `
-          <td data-label="Date & Time">${orderDate}</td>
-          <td data-label="Name">${order.CustomerName || ''}</td>
-          <td data-label="Address">${order.Address || ''}</td>
-          <td data-label="Phone">${order.PhoneNumber || ''}</td>
-          <td data-label="Details"><div class="details">${order.OrderDetails || ''}</div></td>
-          <td data-label="Order ID">${order.OrderID || ''}</td>
-          <td data-label="Status">
-            <select class="status-select" id="status-${order.rowNum}" onchange="updateStatusColor(this)">
-              <option value="Pending" ${order.Status === "Pending" ? "selected" : ""}>Pending</option>
-              <option value="Shipped" ${order.Status === "Shipped" ? "selected" : ""}>Shipped</option>
-              <option value="Delivered" ${order.Status === "Delivered" ? "selected" : ""}>Delivered</option>
-              <option value="Cancelled" ${order.Status === "Cancelled" ? "selected" : ""}>Cancelled</option>
-            </select>
-          </td>
-          <td data-label="Action">
-            <button class="update-btn" onclick="updateStatus(this, ${order.rowNum})">Update</button>
-          </td>
-        `;
-        ordersTableBody.appendChild(row);
-        const newSelect = document.getElementById(`status-${order.rowNum}`);
-        updateStatusColor(newSelect);
-      });
-    }
-
-    function updateStatusColor(selectElement) {
-      selectElement.classList.remove('status-pending', 'status-shipped', 'status-delivered', 'status-cancelled');
-      const statusClass = 'status-' + selectElement.value.toLowerCase();
-      selectElement.classList.add(statusClass);
-    }
-
-    async function updateStatus(button, rowNum) {
-      const newStatus = document.getElementById(`status-${rowNum}`).value;
-      button.textContent = "...";
-      button.disabled = true;
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ rowNum, newStatus })
-        });
-        const result = await res.json();
-        if (result.success) {
-          alert(`Status updated to "${newStatus}"`);
-        } else {
-          throw new Error('Update failed');
-        }
-      } catch (err) {
-        alert("Failed to update status.");
-      } finally {
-        button.textContent = "Update";
-        button.disabled = false;
-      }
-    }
-
     document.addEventListener("DOMContentLoaded", () => {
       if (sessionStorage.getItem("loggedIn") === "true") {
         loginSection.style.display = "none";
@@ -442,6 +387,103 @@
         fetchOrders();
       }
     });
+
+    // Orders management
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4_WzkHKY3X6CTY3ws9ciRVScQrdGr7DHNOd7jKI4H-S6UR0_O39UjNRE3kssPL7BkcQ/exec";
+    const ordersListDiv = document.getElementById("orders-list");
+    const noOrdersMsg = document.getElementById("no-orders-message");
+    const searchInput = document.getElementById("searchInput");
+    const paginationBar = document.getElementById("pagination-bar");
+    let allOrders = [];
+    let currentPage = 1;
+    const ORDERS_PER_PAGE = 6;
+
+    async function fetchOrders() {
+      noOrdersMsg.style.display = "none";
+      ordersListDiv.innerHTML = '';
+      try {
+        const res = await fetch(SCRIPT_URL);
+        const result = await res.json();
+        if (result.success && result.data.length > 0) {
+          allOrders = result.data;
+          renderOrders();
+        } else {
+          noOrdersMsg.style.display = "block";
+        }
+      } catch {
+        noOrdersMsg.textContent = "অর্ডার লোড করা যায়নি।";
+        noOrdersMsg.style.display = "block";
+      }
+    }
+
+    function filterOrders() {
+      const term = searchInput.value.trim().toLowerCase();
+      if (!term) return allOrders;
+      return allOrders.filter(order =>
+        (order.CustomerName || '').toLowerCase().includes(term) ||
+        (order.Address || '').toLowerCase().includes(term) ||
+        (order.PhoneNumber || '').toLowerCase().includes(term) ||
+        (order.OrderID || '').toLowerCase().includes(term) ||
+        (order.OrderDetails || '').toLowerCase().includes(term)
+      );
+    }
+
+    function renderOrders() {
+      const orders = filterOrders();
+      const total = orders.length;
+      if (total === 0) {
+        ordersListDiv.innerHTML = '';
+        paginationBar.innerHTML = '';
+        noOrdersMsg.style.display = "block";
+        return;
+      }
+      noOrdersMsg.style.display = "none";
+      // Pagination
+      const totalPages = Math.ceil(total / ORDERS_PER_PAGE);
+      if (currentPage > totalPages) currentPage = 1;
+      const startIdx = (currentPage - 1) * ORDERS_PER_PAGE;
+      const pagedOrders = orders.slice(startIdx, startIdx + ORDERS_PER_PAGE);
+
+      ordersListDiv.innerHTML = '';
+      pagedOrders.forEach(order => {
+        const orderDate = new Date(order.Timestamp).toLocaleString("en-GB", {
+          day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true
+        });
+        let statusClass = "status-pending";
+        if(order.Status==="Shipped") statusClass="status-shipped";
+        else if(order.Status==="Delivered") statusClass="status-delivered";
+        else if(order.Status==="Cancelled") statusClass="status-cancelled";
+        const card = document.createElement("div");
+        card.className = "order-card";
+        card.innerHTML = `
+          <div class="order-header">
+            <span class="order-date">${orderDate}</span>
+            <span class="order-id">Order ID: ${order.OrderID || ''}</span>
+          </div>
+          <div class="order-detail-row"><span>নাম:</span> ${order.CustomerName || ''}</div>
+          <div class="order-detail-row"><span>ফোন:</span> ${order.PhoneNumber || ''}</div>
+          <div class="order-detail-row"><span>ঠিকানা:</span> ${order.Address || ''}</div>
+          <div class="order-detail-row"><span>ডিটেইলস:</span></div>
+          <div class="order-details">${order.OrderDetails || ''}</div>
+          <div class="status-row ${statusClass}">${order.Status || 'Pending'}</div>
+        `;
+        ordersListDiv.appendChild(card);
+      });
+      // Pagination bar
+      paginationBar.innerHTML = '';
+      if (totalPages > 1) {
+        for (let i = 1; i <= totalPages; i++) {
+          const btn = document.createElement("button");
+          btn.textContent = i;
+          btn.className = "pagination-btn" + (i === currentPage ? " active" : "");
+          btn.onclick = function() { currentPage = i; renderOrders(); };
+          paginationBar.appendChild(btn);
+        }
+      }
+    }
+
+    searchInput.addEventListener("input", function(){ currentPage = 1; renderOrders(); });
+
   </script>
 </body>
 </html>
