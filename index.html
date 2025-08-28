@@ -1,82 +1,447 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TechBindu Admin Panel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0a8a0a;
+      --secondary: #e65c00;
+      --light: #f3f3f3;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f1f5f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* --- Background Video Style --- */
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.2;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #333;
+      font-weight: 600;
+    }
+    h2 {
+      font-size: 1.2rem;
+      color: #555;
+    }
+
+    #login-section {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    
+    /* --- Logo Style --- */
+    #login-section img {
+      width: 120px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+
+    #login-section input {
+      padding: 14px;
+      width: 280px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+      font-size: 16px;
+      transition: width 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    #login-section button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 16px;
+      width: 280px;
+      font-weight: 500;
+    }
+
+    #login-section button:hover {
+      background-color: #067006;
+    }
+
+    #login-error {
+      color: red;
+      margin-top: 10px;
+      font-weight: 500;
+    }
+
+    #admin-panel {
+      display: none;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+    }
+
+    .header-container h1 {
+        text-align: left;
+    }
+
+    #logout-btn {
+      background-color: var(--secondary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #logout-btn:hover {
+      background-color: #c54a00;
+    }
+
+    .table-container {
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #e2e8f0;
+      padding: 14px;
+      text-align: left;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    th {
+      background-color: #f8fafc;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .details {
+      white-space: pre-wrap;
+      background: var(--light);
+      padding: 10px;
+      border-radius: 5px;
+      max-height: 120px;
+      overflow-y: auto;
+      font-size: 13px;
+      word-break: break-word;
+      border: 1px solid #e2e8f0;
+    }
+
+    .status-select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'Poppins', sans-serif;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    
+    .status-select.status-pending { background-color: #fff3cd; color: #856404; border-color: #ffeeba; }
+    .status-select.status-shipped { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb; }
+    .status-select.status-delivered { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+    .status-select.status-cancelled { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+
+    .update-btn {
+      padding: 8px 14px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+      background-color: #334155;
+      color: white;
+      width: 100%;
+    }
+
+    .update-btn:hover {
+      background-color: #1e293b;
+    }
+
+    #loading-message, #no-orders-message {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 30px;
+      color: #777;
+    }
+
+    /* --- Mobile View Enhancements --- */
+    @media (max-width: 768px) {
+      body { padding: 10px; }
+      .container { padding: 15px; }
+      
+      .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .header-container h1 {
+        text-align: left;
+        margin: 0;
+        font-size: 1.4rem;
+      }
+      
+      #login-section input, 
+      #login-section button {
+        width: 90%;
+      }
+      
+      #logout-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+      }
+
+      /* Force table to not be a table anymore */
+      table, thead, tbody, th, td, tr { display: block; }
+      thead tr { position: absolute; top: -9999px; left: -9999px; }
+      tr { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 15px; padding: 10px; background-color: #fff; }
+      td { border: none; border-bottom: 1px solid #f1f5f9; position: relative; padding-left: 45%; padding-top: 8px; padding-bottom: 8px; min-height: 40px; text-align: right; }
+      td:last-child { border-bottom: 0; }
+
+      td:before {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        width: 40%;
+        padding-right: 10px;
+        white-space: nowrap;
+        content: attr(data-label);
+        font-weight: 600;
+        text-align: left;
+        transform: translateY(-50%);
+        color: var(--primary);
+      }
+      
+      .details {
+        text-align: left;
+      }
+      
+      .update-btn { 
+        width: 100%;
+        margin-top: 5px;
+      }
+    }
+  </style>
 </head>
 <body>
+
   <video autoplay muted loop id="bg-video">
-    <source src="techbindu_intro.mp4" type="video/mp4">
-    আপনার ব্রাউজার ভিডিও সাপোর্ট করে না।
+    <source src="techbindu intro.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
   </video>
 
-  <div class="container" role="main">
+  <div class="container">
     <div id="login-section">
       <img src="logo.jpeg" alt="TechBindu Logo">
-      <h1>অ্যাডমিন লগইন</h1>
-      <div class="password-input-group">
-        <input type="password" id="password" placeholder="পাসওয়ার্ড লিখুন" aria-label="পাসওয়ার্ড"/>
-        <span class="toggle-password" id="toggle-password" tabindex="0" aria-label="পাসওয়ার্ড দেখান/লুকান">👁️</span>
-      </div>
-      <button id="login-btn">লগইন</button>
-      <p id="login-error" aria-live="polite"></p>
+      <h1>Admin Login</h1>
+      <input type="password" id="password" placeholder="Enter Password" />
+      <br />
+      <button onclick="login()">Login</button>
+      <p id="login-error"></p>
     </div>
 
-    <div id="admin-panel" style="display:none;">
+    <div id="admin-panel">
       <div class="header-container">
-        <h1>অর্ডার ম্যানেজমেন্ট</h1>
-        <div>
-          <button id="dark-mode-toggle">🌙 ডার্ক/লাইট</button>
-          <button id="logout-btn">লগআউট</button>
-        </div>
-      </div>
-      <div class="filter-search">
-        <input type="text" id="search-input" placeholder="নাম/ফোন/অর্ডার ID দিয়ে সার্চ করুন" aria-label="অর্ডার সার্চ"/>
-        <select id="status-filter" aria-label="স্ট্যাটাস ফিল্টার">
-          <option value="">সব স্ট্যাটাস</option>
-          <option value="Pending">Pending</option>
-          <option value="Shipped">Shipped</option>
-          <option value="Delivered">Delivered</option>
-          <option value="Cancelled">Cancelled</option>
-        </select>
-        <input type="date" id="date-filter" aria-label="তারিখ ফিল্টার"/>
+        <h1>Order Management</h1>
+        <button id="logout-btn" onclick="logout()">Logout</button>
       </div>
       <h2 id="total-orders"></h2>
-      <div class="table-container" tabindex="0">
-        <table aria-label="অর্ডার টেবিল">
+
+      <div class="table-container">
+        <table>
           <thead>
             <tr>
-              <th>তারিখ ও সময়</th>
-              <th>নাম</th>
-              <th>ঠিকানা</th>
-              <th>ফোন</th>
-              <th>ডিটেইলস</th>
-              <th>অর্ডার ID</th>
-              <th>স্ট্যাটাস</th>
-              <th>একশন</th>
+              <th>Date & Time</th>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Phone</th>
+              <th>Details</th>
+              <th>Order ID</th>
+              <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody id="orders-table-body"></tbody>
         </table>
       </div>
-      <div id="pagination"></div>
-      <div id="loading-spinner" class="spinner"></div>
-      <p id="no-orders-message" style="display:none;">কোন অর্ডার পাওয়া যায়নি।</p>
-    </div>
 
-    <!-- Confirmation Modal -->
-    <div id="modal-overlay" style="display:none;">
-      <div id="confirmation-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <h3 id="modal-title">স্ট্যাটাস পরিবর্তন নিশ্চিত?</h3>
-        <p id="modal-text"></p>
-        <button id="confirm-btn">হ্যাঁ</button>
-        <button id="cancel-btn">না</button>
-      </div>
+      <p id="loading-message">Loading orders...</p>
+      <p id="no-orders-message" style="display:none;">No orders found.</p>
     </div>
   </div>
-  <script src="script.js"></script>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4_WzkHKY3X6CTY3ws9ciRVScQrdGr7DHNOd7jKI4H-S6UR0_O39UjNRE3kssPL7BkcQ/exec";
+    const ADMIN_PASSWORD = "Admin69";
+
+    const loginSection = document.getElementById("login-section");
+    const adminPanel = document.getElementById("admin-panel");
+    const passwordInput = document.getElementById("password");
+    const loginError = document.getElementById("login-error");
+    const ordersTableBody = document.getElementById("orders-table-body");
+    const loadingMessage = document.getElementById("loading-message");
+    const noOrdersMessage = document.getElementById("no-orders-message");
+    const totalOrders = document.getElementById("total-orders");
+
+    function login() {
+      loginError.textContent = "";
+      if (passwordInput.value === ADMIN_PASSWORD) {
+        sessionStorage.setItem("loggedIn", "true");
+        loginSection.style.display = "none";
+        adminPanel.style.display = "block";
+        fetchOrders();
+      } else {
+        loginError.textContent = "Incorrect password!";
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem("loggedIn");
+      location.reload();
+    }
+
+    async function fetchOrders() {
+      loadingMessage.style.display = "block";
+      noOrdersMessage.style.display = "none";
+      ordersTableBody.innerHTML = "";
+      try {
+        const res = await fetch(SCRIPT_URL);
+        const result = await res.json();
+        if (result.success && result.data.length > 0) {
+          renderOrders(result.data);
+        } else {
+          noOrdersMessage.style.display = "block";
+        }
+      } catch {
+        noOrdersMessage.textContent = "Failed to load orders.";
+        noOrdersMessage.style.display = "block";
+      } finally {
+        loadingMessage.style.display = "none";
+      }
+    }
+
+    function renderOrders(orders) {
+      totalOrders.textContent = `Total Orders: ${orders.length}`;
+      ordersTableBody.innerHTML = "";
+      orders.forEach(order => {
+        const row = document.createElement("tr");
+        const orderDate = new Date(order.Timestamp).toLocaleString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true
+        });
+
+        row.innerHTML = `
+          <td data-label="Date & Time">${orderDate}</td>
+          <td data-label="Name">${order.CustomerName || ''}</td>
+          <td data-label="Address">${order.Address || ''}</td>
+          <td data-label="Phone">${order.PhoneNumber || ''}</td>
+          <td data-label="Details"><div class="details">${order.OrderDetails || ''}</div></td>
+          <td data-label="Order ID">${order.OrderID || ''}</td>
+          <td data-label="Status">
+            <select class="status-select" id="status-${order.rowNum}" onchange="updateStatusColor(this)">
+              <option value="Pending" ${order.Status === "Pending" ? "selected" : ""}>Pending</option>
+              <option value="Shipped" ${order.Status === "Shipped" ? "selected" : ""}>Shipped</option>
+              <option value="Delivered" ${order.Status === "Delivered" ? "selected" : ""}>Delivered</option>
+              <option value="Cancelled" ${order.Status === "Cancelled" ? "selected" : ""}>Cancelled</option>
+            </select>
+          </td>
+          <td data-label="Action">
+            <button class="update-btn" onclick="updateStatus(this, ${order.rowNum})">Update</button>
+          </td>
+        `;
+        ordersTableBody.appendChild(row);
+        const newSelect = document.getElementById(`status-${order.rowNum}`);
+        updateStatusColor(newSelect);
+      });
+    }
+
+    function updateStatusColor(selectElement) {
+      selectElement.classList.remove('status-pending', 'status-shipped', 'status-delivered', 'status-cancelled');
+      const statusClass = 'status-' + selectElement.value.toLowerCase();
+      selectElement.classList.add(statusClass);
+    }
+
+    async function updateStatus(button, rowNum) {
+      const newStatus = document.getElementById(`status-${rowNum}`).value;
+      button.textContent = "...";
+      button.disabled = true;
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rowNum, newStatus })
+        });
+        const result = await res.json();
+        if (result.success) {
+          alert(`Status updated to "${newStatus}"`);
+        } else {
+          throw new Error('Update failed');
+        }
+      } catch (err) {
+        alert("Failed to update status.");
+      } finally {
+        button.textContent = "Update";
+        button.disabled = false;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      if (sessionStorage.getItem("loggedIn") === "true") {
+        loginSection.style.display = "none";
+        adminPanel.style.display = "block";
+        fetchOrders();
+      }
+    });
+  </script>
 </body>
 </html>
